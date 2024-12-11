@@ -39,16 +39,20 @@ app.get('/usuarios', (req, res) => {
 });
 
 // Ruta para insertar un nuevo usuario
-app.post('/usuarios', (req, res) => {
-  const { nombre, email } = req.body;
-  const query = 'INSERT INTO usuarios (nombre, email) VALUES (?, ?)';
-  db.query(query, [nombre, email], (err, result) => {
-    if (err) {
-      return res.status(500).json({ error: 'Error al insertar el usuario' });
-    }
-    res.status(201).json({ message: 'Usuario creado con éxito' });
+app.post('/api/usuarios', (req, res) => {
+    const { nombre, correo } = req.body;
+    const sql = `INSERT INTO usuarios (nombre, correo) VALUES ('${nombre}', '${correo}')`;
+    
+    db.query(sql, (err, result) => {
+      if (err) {
+        console.error('Error al agregar usuario:', err);
+        res.status(500).send('Error al agregar usuario');
+      } else {
+        res.status(201).send('Usuario agregado correctamente');
+      }
+    });
   });
-});
+  
 
 // Iniciar el servidor en el puerto 5000
 app.listen(port, () => {
